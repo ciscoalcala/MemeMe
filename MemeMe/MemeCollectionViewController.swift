@@ -95,9 +95,11 @@ class MemeCollectionViewController: UICollectionViewController {
 
     @IBAction func addMeme(sender: UIBarButtonItem) {
         
-        performSegueWithIdentifier("ShowMemeEditView", sender: self)
-        
+        if let vc = storyboard?.instantiateViewControllerWithIdentifier("MemeEditViewControllerID"){
+            presentViewController(vc, animated: true, completion: nil)
+        }
     }
+    
     @IBAction func editTableView(sender: UIBarButtonItem) {
         
     }
