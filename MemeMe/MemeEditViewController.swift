@@ -1,5 +1,5 @@
 //
-//  ViewController.swift
+//  MemeEditViewController.swift
 //  MemeMe
 //
 //  Created by francisco Alcala on 1/16/16.
@@ -8,7 +8,7 @@
 
 import UIKit
 
-class ViewController: UIViewController {
+class MemeEditViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
