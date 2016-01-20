@@ -8,20 +8,371 @@
 
 import UIKit
 
-class MemeEditViewController: UIViewController {
+class MemeEditViewController: UIViewController, UITextFieldDelegate, UIImagePickerControllerDelegate,UINavigationControllerDelegate {
+    
+    
+    
+    
+    //MARK: I B OUTLETS
+    @IBOutlet weak var spacingConstraintFromTopTextToTopOfImageView: NSLayoutConstraint!
+    
+    @IBOutlet weak var spacingConstraintFromBottomTextToBottomOfImageView: NSLayoutConstraint!
+    
+    @IBOutlet weak var widthConstraintOfTopText: NSLayoutConstraint!
+    
+    @IBOutlet weak var shareButton: UIBarButtonItem!
+    
+    @IBOutlet weak var topTextField: UITextField!
+    
+    @IBOutlet weak var imageView: UIImageView!
+    
+    @IBOutlet weak var bottomTextField: UITextField!
+    
+    @IBOutlet weak var cameraButton: UIBarButtonItem!
+    
+    
+    
+    
+    //MARK: VARS RELATED TO IMAGE SELECTED
+    
+    //imageSelected will only be called after image has been selected
+    var imageSelected: UIImage!
+    
+    //will be used to reposition top and bottom text views after image is selected, based on aspect fit imageView
+    var newWidthBasedOnFullHeight = CGFloat(0.0)
+    
+    //will be used to reposition top and bottom text views after image is selected, based on aspect fit imageView
+    var newHeightBasedOnFullWidth = CGFloat(0.0)
+    
+    //bool to keep track if the width of imageView is filled, after image has been selected
+    var widthIsFilled = true
+    
+    //will be used to move text views vertically
+    var diffInHeightBetweenImageViewAndImageSelected = CGFloat(0.0)
+    
+    //will be used to store the original
+    
+    
 
+    
+    //MARK: VIEW LIFECYCLE
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
         
-        print("this is going to be my first commit")
+        
+        // SET UP TEXTFIELDS PROPERTIES AND ATTRIBUTES
+        let memeTextAttributes = [
+            NSStrokeColorAttributeName : UIColor.greenColor(),
+            NSForegroundColorAttributeName : UIColor.whiteColor(),
+            NSFontAttributeName : UIFont(name: "impact", size: 40)!,
+            NSStrokeWidthAttributeName : -1.0
+        ]
+        
+        topTextField.defaultTextAttributes = memeTextAttributes
+        bottomTextField.defaultTextAttributes = memeTextAttributes
+        
+        
+        topTextField.textAlignment = NSTextAlignment.Center
+        bottomTextField.textAlignment = NSTextAlignment.Center
+        
+        topTextField.text = "TOP TEXT"
+        bottomTextField.text = "BOTTOM TEXT"
+        
+        topTextField.delegate = self
+        bottomTextField.delegate = self
+        
+        
+        
+        
+        // SET UP NOTIFICATIONS FOR SCREEN ORIENTATIONS
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "rotated", name: UIDeviceOrientationDidChangeNotification, object: nil)
+        
+        UIDevice.currentDevice().beginGeneratingDeviceOrientationNotifications()
     }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
+    
+    
+    override func viewWillAppear(animated: Bool) {
+        
+        
+        //  ENABLE / DISABLE CAMERA BUTTON DEPENDING ON AVAILABILITY OF DEVICE/SIMULATOR
+        if UIImagePickerController.isSourceTypeAvailable(UIImagePickerControllerSourceType.Camera){
+            cameraButton.enabled = true
+        }
+        else{
+            cameraButton.enabled = false
+        }
+        
+        
+        
+        //  ENABLE / DISABLE SHARE BUTTON UNTIL IMAGE HAS BEEN LOADED
+        if imageView.image == nil{
+            shareButton.enabled = false
+        }
+        else{
+            shareButton.enabled = true
+            adjustTextViewsAfterImageSelected(imageView.image!)
+        }
+        
+        
+        
+        //  SUBSCRIBE TO KEYBOARD SHOW/HIDE NOTIFICAIONS
+        subscribeToKeyboardShowNotifications()
+        subscribeToKeyboardHideNotifications()
+        
     }
-
+    
+    
+    override func viewWillDisappear(animated: Bool) {
+        
+        super.viewWillDisappear(animated)
+        
+        //  UNSUBSCRIBE FROM KEYBOARD NOTIFICATIONS
+        unsubscribeFromKeyboardShowNotifications()
+        unsubscribeFromKeyboardHideNotifications()
+        
+        //  END GENERATING DEVICE ORIENTATION NOTIFICATIONS
+        UIDevice.currentDevice().endGeneratingDeviceOrientationNotifications()
+        
+        
+    }
+    
+    
+    
+    
+    //MARK: KEYBOARD WILL SHOW NOTIFICATIONS
+    func subscribeToKeyboardShowNotifications() {
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "keyboardWillShow:"    , name: UIKeyboardWillShowNotification, object: nil)
+    }
+    
+    
+    func unsubscribeFromKeyboardShowNotifications() {
+        NSNotificationCenter.defaultCenter().removeObserver(self, name:
+            UIKeyboardWillShowNotification, object: nil)
+    }
+    
+    
+    func keyboardWillShow(notification: NSNotification) {
+        //ONLY MOVE THE VIEW UP IF THE BOTTOM TEXT FIELD IS ACTIVE
+        if bottomTextField.isFirstResponder(){
+            view.frame.origin.y = getKeyboardHeight(notification) * -1
+        }
+        else{
+            view.frame.origin.y = 0
+        }
+    }
+    
+    
+    func getKeyboardHeight(notification: NSNotification) -> CGFloat {
+        let userInfo = notification.userInfo
+        let keyboardSize = userInfo![UIKeyboardFrameEndUserInfoKey] as! NSValue // of CGRect
+        return keyboardSize.CGRectValue().height
+    }
+    
+    
+    
+    
+    //MARK: KEYBOARD WILL HIDE NOTIFICATIONS
+    func subscribeToKeyboardHideNotifications() {
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "keyboardWillHide:"    , name: UIKeyboardWillHideNotification, object: nil)
+    }
+    
+    
+    func unsubscribeFromKeyboardHideNotifications() {
+        NSNotificationCenter.defaultCenter().removeObserver(self, name:
+            UIKeyboardWillHideNotification, object: nil)
+    }
+    
+    
+    func keyboardWillHide(notification: NSNotification) {
+        view.frame.origin.y = 0
+    }
+    
+    
+    
+    
+    //MARK: I B ACTIONS
+    @IBAction func pickImageFromAlbum(sender: UIBarButtonItem) {
+        
+        let imagePicker = UIImagePickerController()
+        
+        imagePicker.delegate = self
+        
+        imagePicker.sourceType = UIImagePickerControllerSourceType.PhotoLibrary
+        
+        presentViewController(imagePicker, animated: true, completion: nil)
+    }
+    
+    
+    @IBAction func pickImageFromCamera(sender: UIBarButtonItem) {
+        
+        let imagePicker = UIImagePickerController()
+        
+        imagePicker.delegate = self
+        
+        imagePicker.sourceType = UIImagePickerControllerSourceType.Camera
+        
+        presentViewController(imagePicker, animated: true, completion: nil)
+    }
+    
+    
+    @IBAction func share(sender: UIBarButtonItem) {
+        /*
+        let memedImage = generateMemedImage()
+        
+        let activityVC = UIActivityViewController(activityItems: [memedImage], applicationActivities: nil)
+        
+        presentViewController(activityVC, animated: true, completion: nil)
+        
+        activityVC.completionWithItemsHandler = {
+            (activity: String?, completed: Bool, items: [AnyObject]?, error: NSError?) -> Void in
+            if completed {
+                self.save(memedImage)
+                self.dismissViewControllerAnimated(true, completion: nil)
+            }
+        }
+*/
+        
+    }
+    
+    
+    @IBAction func cancel(sender: UIBarButtonItem) {
+        topTextField.text = "TOP TEXT"
+        bottomTextField.text = "BOTTOM TEXT"
+        imageView.image = nil
+        shareButton.enabled = false
+        
+    }
+    
+    
+    
+    
+    //MARK: IMAGE PICKER CONTROLLER DELEGATE METHODS
+    func imagePickerControllerDidCancel(picker: UIImagePickerController){
+        print ("cancel")
+        
+        dismissViewControllerAnimated(true, completion: nil)
+        
+    }
+    
+    
+    func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : AnyObject]){
+        print("did pick something")
+        
+        dismissViewControllerAnimated(true, completion: nil)
+        
+        if let image = info[UIImagePickerControllerOriginalImage] as? UIImage{
+            
+            imageView.image = image
+            
+            imageSelected = image
+            
+            print(" ")
+            print("this is the height of image picked")
+            print(image.size.height)
+            print(" ")
+            print("this is the width of image picked")
+            print(image.size.width)
+            print(" ")
+            
+            
+        }
+        
+        
+    }
+    
+    
+    func save(memedImage: UIImage) {
+    }
+        
+    
+    
+    
+    //MARK:  WHEN SCREEN IS ROTATED - UTILITY FUNCTIONS
+    func rotated(){
+        
+        if imageView.image == nil{
+            print("there is no imagee")
+        }
+        else{
+            adjustTextViewsAfterImageSelected(imageView.image!)
+        }
+        
+    }
+    
+    
+    func adjustTextViewsAfterImageSelected(selectedImage: UIImage){
+        
+        //first determine if the image selected will fill the width or height
+        isWidthFilled(imageSelected.size.width, heightOfImageSelected: imageSelected.size.width)
+        
+        if widthIsFilled{
+            
+            //find the difference in heights
+            diffInHeightBetweenImageViewAndImageSelected = whatIsTheDiffInHeightBetweenImageViewAndImageSelected(imageView.frame.height, imageSelectedHeight: imageSelected.size.height)
+            
+            
+            //textViews will be adjusted vertically
+            spacingConstraintFromTopTextToTopOfImageView.constant = diffInHeightBetweenImageViewAndImageSelected
+            spacingConstraintFromBottomTextToBottomOfImageView.constant = diffInHeightBetweenImageViewAndImageSelected * -1
+            
+            
+            //topTextView will have its length reset to the width of the imageView
+            //bottomTextView is constrained to match the length of top text view
+            widthConstraintOfTopText.constant = imageView.frame.width
+            
+            //this will redraw the view to update the text view locations and lengths
+            view.setNeedsDisplay()
+        
+        }
+            
+            
+        else{ //height is filled
+            
+            //text length will be adjusted to match width of image that was calculated
+            widthConstraintOfTopText.constant = newWidthBasedOnFullHeight
+            
+            
+            //reset the locations of top and bottom text views
+            spacingConstraintFromTopTextToTopOfImageView.constant = 0.0
+            spacingConstraintFromBottomTextToBottomOfImageView.constant = 0.0
+            
+            //this will redraw the view to update the text view locations and lengths
+            view.setNeedsDisplay()
+        
+        }
+        
+    }
+    
+    
+    func isWidthFilled(widthOfImageSelected: CGFloat, heightOfImageSelected: CGFloat){
+        
+        //calculate the new width of image if the height is filled
+        newWidthBasedOnFullHeight = (imageView.frame.size.height / imageSelected.size.height) * imageSelected.size.width
+        
+        //calculate the new height of image if the widht is filled
+        newHeightBasedOnFullWidth = (imageView.frame.size.width / imageSelected.size.width) * imageSelected.size.height
+        
+        if newHeightBasedOnFullWidth < imageView.frame.size.height{
+            print("width will be filled, height will be calculated")
+            widthIsFilled = true
+        }
+        else{
+            print("height will be filled, width will be calculated")
+            widthIsFilled = false
+        }
+        
+    }
+    
+    
+    func whatIsTheDiffInHeightBetweenImageViewAndImageSelected(imageViewHeight: CGFloat, imageSelectedHeight: CGFloat) -> CGFloat{
+        
+        //(full height of imageView container - calculated height) * 0.5
+        //0.5 because diff will be split above and below image selected
+        return ((imageView.frame.height - newHeightBasedOnFullWidth) * 0.5)
+    }
+    
+    
+    
 
 }
 
