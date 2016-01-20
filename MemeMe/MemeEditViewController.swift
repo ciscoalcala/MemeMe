@@ -50,8 +50,8 @@ class MemeEditViewController: UIViewController, UITextFieldDelegate, UIImagePick
     //will be used to move text views vertically
     var diffInHeightBetweenImageViewAndImageSelected = CGFloat(0.0)
     
-    //will be used to store the original
-    
+    //will be used to create rect for generating meme
+    var diffInWidthBetweenImageViewAndImageSelected = CGFloat(0.0)
     
 
     
@@ -152,6 +152,7 @@ class MemeEditViewController: UIViewController, UITextFieldDelegate, UIImagePick
     
     
     func keyboardWillShow(notification: NSNotification) {
+        
         //ONLY MOVE THE VIEW UP IF THE BOTTOM TEXT FIELD IS ACTIVE
         if bottomTextField.isFirstResponder(){
             view.frame.origin.y = getKeyboardHeight(notification) * -1
@@ -282,6 +283,55 @@ class MemeEditViewController: UIViewController, UITextFieldDelegate, UIImagePick
     
     
     func save(memedImage: UIImage) {
+        
+        //CREATE THE MEME
+        let meme = Meme( topText: topTextField.text!, bottomText: bottomTextField.text!, originalImage:imageView.image!, memedImage: memedImage)
+        
+        
+        //ADD THE MEME TO THE MEMES ARRAY STORED IN APP DELEGATE
+        let object = UIApplication.sharedApplication().delegate
+        let appDelegate = object as! AppDelegate
+        appDelegate.memes.append(meme)
+        
+        print("this is the array after saving")
+        print(appDelegate.memes)
+
+    }
+    
+    
+    
+    func generateMemedImage()->UIImage{
+    
+        if widthIsFilled{
+            UIGraphicsBeginImageContextWithOptions(CGSize(width: imageView.frame.width, height: newHeightBasedOnFullWidth), true, 0.0)
+            
+            view.drawViewHierarchyInRect(CGRectMake(0.0, diffInHeightBetweenImageViewAndImageSelected, imageView.frame.width, newWidthBasedOnFullHeight), afterScreenUpdates: true)
+            
+            let memedImage : UIImage = UIGraphicsGetImageFromCurrentImageContext()
+            
+            UIGraphicsEndImageContext()
+            
+            return memedImage
+            
+            
+        }
+            
+        else{ //height is filled
+            
+            UIGraphicsBeginImageContextWithOptions(CGSize(width: newWidthBasedOnFullHeight, height: imageView.frame.height), true, 0.0)
+            
+            view.drawViewHierarchyInRect(CGRectMake(0.0, diffInWidthBetweenImageViewAndImageSelected, imageView.frame.width, newWidthBasedOnFullHeight), afterScreenUpdates: true)
+            
+            let memedImage : UIImage = UIGraphicsGetImageFromCurrentImageContext()
+            
+            UIGraphicsEndImageContext()
+            
+            return memedImage
+            
+        }
+        
+        
+    
     }
         
     
@@ -308,7 +358,7 @@ class MemeEditViewController: UIViewController, UITextFieldDelegate, UIImagePick
         if widthIsFilled{
             
             //find the difference in heights
-            diffInHeightBetweenImageViewAndImageSelected = whatIsTheDiffInHeightBetweenImageViewAndImageSelected(imageView.frame.height, imageSelectedHeight: imageSelected.size.height)
+            diffInHeightBetweenImageViewAndImageSelected = whatIsTheDiffInHeightBetweenImageViewAndImageSelected()
             
             
             //textViews will be adjusted vertically
@@ -328,9 +378,11 @@ class MemeEditViewController: UIViewController, UITextFieldDelegate, UIImagePick
             
         else{ //height is filled
             
+            //find the difference in widths
+            diffInWidthBetweenImageViewAndImageSelected = whatIsTheDiffInWidthBetweenImageViewAndImageSelected()
+            
             //text length will be adjusted to match width of image that was calculated
             widthConstraintOfTopText.constant = newWidthBasedOnFullHeight
-            
             
             //reset the locations of top and bottom text views
             spacingConstraintFromTopTextToTopOfImageView.constant = 0.0
@@ -364,12 +416,55 @@ class MemeEditViewController: UIViewController, UITextFieldDelegate, UIImagePick
     }
     
     
-    func whatIsTheDiffInHeightBetweenImageViewAndImageSelected(imageViewHeight: CGFloat, imageSelectedHeight: CGFloat) -> CGFloat{
+    func whatIsTheDiffInHeightBetweenImageViewAndImageSelected() -> CGFloat{
         
         //(full height of imageView container - calculated height) * 0.5
         //0.5 because diff will be split above and below image selected
         return ((imageView.frame.height - newHeightBasedOnFullWidth) * 0.5)
     }
+    
+    
+    func whatIsTheDiffInWidthBetweenImageViewAndImageSelected() -> CGFloat{
+        
+        //(full width of imageView container - calculated width) * 0.5
+        //0.5 because diff will be split on each side of image selected
+        return ((imageView.frame.width - newWidthBasedOnFullHeight) * 0.5)
+    }
+    
+    
+    
+    //MARK: TEXT FIELD DELEGATE METHODS
+    func textFieldDidBeginEditing(textField: UITextField) {
+        topTextField.clearsOnBeginEditing = true
+        textField.text = ""
+        
+    }
+    
+    
+    func textFieldDidEndEditing(textField: UITextField) {
+        
+        //REPLACES AN EMPTY TEXTFIELD WITH THE DEFAULT TEXT
+        if topTextField.text == ""{
+            topTextField.text = "TOP TEXT"
+        }
+        
+        if bottomTextField.text == ""{
+            bottomTextField.text = "BOTTOM TEXT"
+        }
+        
+        //CHANGES ANY LOWERCASE STRING TO UPPERCASE
+        textField.text = textField.text!.uppercaseString
+    }
+    
+    
+    func textFieldShouldReturn(textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        return false
+    }
+    
+    
+    
+    
     
     
     
