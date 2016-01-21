@@ -24,7 +24,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="QXF-4t-Tkd" userLabel="Top Toolbar">
-                                <rect key="frame" x="0.0" y="20" width="600" height="44"/>
+                                <rect key="frame" x="0.0" y="0.0" width="600" height="44"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="44" id="RyG-qW-buH"/>
                                 </constraints>
@@ -43,10 +43,10 @@
                                 </items>
                             </toolbar>
                             <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="dbq-Uz-V3i">
-                                <rect key="frame" x="0.0" y="64" width="600" height="492"/>
+                                <rect key="frame" x="0.0" y="44" width="600" height="512"/>
                             </imageView>
                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" text="TOP TEXT" textAlignment="center" minimumFontSize="14" translatesAutoresizingMaskIntoConstraints="NO" id="Eg9-jQ-zsW">
-                                <rect key="frame" x="175" y="84" width="250" height="49"/>
+                                <rect key="frame" x="175" y="64" width="250" height="49"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="250" id="iXZ-hs-0RG"/>
                                 </constraints>
@@ -85,8 +85,6 @@
                             <constraint firstAttribute="trailing" secondItem="QXF-4t-Tkd" secondAttribute="trailing" symbolic="YES" id="1Xf-4x-sPn"/>
                             <constraint firstItem="LnK-SD-mIS" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="4VM-D5-Ndh"/>
                             <constraint firstItem="LnK-SD-mIS" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" symbolic="YES" id="BdG-Ar-Wji"/>
-                            <constraint firstAttribute="trailing" secondItem="LnK-SD-mIS" secondAttribute="trailing" constant="1" id="C1j-N9-Qf1"/>
-                            <constraint firstItem="QXF-4t-Tkd" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" symbolic="YES" id="GWT-Ga-Jao"/>
                             <constraint firstItem="dbq-Uz-V3i" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="JyD-xg-2J9"/>
                             <constraint firstItem="QXF-4t-Tkd" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" symbolic="YES" id="KeH-n9-VTD"/>
                             <constraint firstItem="Acw-AP-Vm4" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="Q59-gn-yRv"/>
@@ -99,14 +97,10 @@
                             <constraint firstItem="Acw-AP-Vm4" firstAttribute="bottom" secondItem="dbq-Uz-V3i" secondAttribute="bottom" constant="-20" id="jb7-k1-xfE"/>
                             <constraint firstItem="Eg9-jQ-zsW" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="n8B-q2-qul"/>
                             <constraint firstItem="Acw-AP-Vm4" firstAttribute="width" secondItem="Eg9-jQ-zsW" secondAttribute="width" id="p7b-pA-Zof"/>
+                            <constraint firstItem="QXF-4t-Tkd" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" id="q2C-yo-d0a"/>
                         </constraints>
-                        <variation key="default">
-                            <mask key="constraints">
-                                <exclude reference="C1j-N9-Qf1"/>
-                            </mask>
-                        </variation>
                     </view>
-                    <nil key="simulatedBottomBarMetrics"/>
+                    <nil key="simulatedStatusBarMetrics"/>
                     <connections>
                         <outlet property="bottomTextField" destination="Acw-AP-Vm4" id="cBg-qx-r7u"/>
                         <outlet property="cameraButton" destination="Cmy-OY-bo3" id="5iU-yz-kM5"/>
@@ -335,6 +329,6 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="PBE-fU-bVQ"/>
+        <segue reference="IrC-4K-e6e"/>
     </inferredMetricsTieBreakers>
 </document>
