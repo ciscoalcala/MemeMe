@@ -225,9 +225,7 @@ class MemeEditViewController: UIViewController, UITextFieldDelegate, UIImagePick
     }
     
     
-
     
-    //MARK: MEME GENERATING, SAVING, SHARING
     @IBAction func share(sender: UIBarButtonItem) {
         
         let memedImage = generateMemedImage()
@@ -248,14 +246,15 @@ class MemeEditViewController: UIViewController, UITextFieldDelegate, UIImagePick
     }
     
     
+
     
-    
+    //MARK: MEME GENERATING, SAVING
     func generateMemedImage()->UIImage{
         
         if widthIsFilled{
-            UIGraphicsBeginImageContextWithOptions(CGSize(width: imageView.frame.width, height: newHeightBasedOnFullWidth), true, 0.0)
+            UIGraphicsBeginImageContextWithOptions(CGSize(width: imageView.frame.width, height: newHeightBasedOnFullWidth), true, 1.0)
             
-            view.drawViewHierarchyInRect(CGRectMake(0.0, diffInHeightBetweenImageViewAndImageSelected, imageView.frame.width, newWidthBasedOnFullHeight), afterScreenUpdates: true)
+            view.drawViewHierarchyInRect(CGRectMake(0.0, diffInHeightBetweenImageViewAndImageSelected * -1, imageView.frame.width, newWidthBasedOnFullHeight), afterScreenUpdates: true)
             
             let memedImage : UIImage = UIGraphicsGetImageFromCurrentImageContext()
             

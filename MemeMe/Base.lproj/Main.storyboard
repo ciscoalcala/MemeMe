@@ -3,6 +3,7 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9529"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <customFonts key="customFonts">
         <mutableArray key="impact.ttf">
@@ -119,7 +120,7 @@
         <!--Meme Detail View Controller-->
         <scene sceneID="gPG-C5-T84">
             <objects>
-                <viewController id="JC6-vq-MlR" customClass="MemeDetailViewController" customModule="MemeMe" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="MemeDetailViewController_ID" id="JC6-vq-MlR" customClass="MemeDetailViewController" customModule="MemeMe" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="e5C-G0-Xz9"/>
                         <viewControllerLayoutGuide type="bottom" id="W7E-ZY-sr1"/>
@@ -127,8 +128,24 @@
                     <view key="view" contentMode="scaleToFill" id="oe1-kU-XOI">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="1dQ-fc-9Di">
+                                <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                            </imageView>
+                        </subviews>
                         <color key="backgroundColor" red="0.0" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                        <constraints>
+                            <constraint firstItem="1dQ-fc-9Di" firstAttribute="top" secondItem="oe1-kU-XOI" secondAttribute="topMargin" id="Hm4-PR-8hW"/>
+                            <constraint firstItem="1dQ-fc-9Di" firstAttribute="leading" secondItem="oe1-kU-XOI" secondAttribute="leading" id="NcB-ba-DRy"/>
+                            <constraint firstAttribute="bottomMargin" secondItem="1dQ-fc-9Di" secondAttribute="bottom" id="jVy-aI-Oxy"/>
+                            <constraint firstAttribute="trailing" secondItem="1dQ-fc-9Di" secondAttribute="trailing" id="n82-G6-H1I"/>
+                        </constraints>
                     </view>
+                    <nil key="simulatedStatusBarMetrics"/>
+                    <nil key="simulatedTopBarMetrics"/>
+                    <connections>
+                        <outlet property="myImageView" destination="1dQ-fc-9Di" id="92X-zS-Ht4"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="f4w-3B-skf" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -220,8 +237,8 @@
                                     <outlet property="memeCellBottomLabel" destination="oez-hK-yCr" id="X9Z-ky-E7s"/>
                                     <outlet property="memeCellTopLabel" destination="46f-xq-If3" id="ua6-4U-gZz"/>
                                     <outlet property="memeImageBottomLabel" destination="38x-Yd-YIr" id="Xgu-cP-NBs"/>
+                                    <outlet property="memeImageTopLabel" destination="ObU-mP-vaP" id="eYs-hv-f9w"/>
                                     <outlet property="memeImageView" destination="RGi-80-NuM" id="2Mg-pd-TAU"/>
-                                    <outlet property="memeeImageTopLabel" destination="ObU-mP-vaP" id="h5T-Il-g5K"/>
                                 </connections>
                             </tableViewCell>
                         </prototypes>
@@ -243,6 +260,7 @@
                         </barButtonItem>
                     </navigationItem>
                     <connections>
+                        <outlet property="myTableView" destination="I65-o8-6Kj" id="EnL-km-1BD"/>
                         <segue destination="JC6-vq-MlR" kind="showDetail" identifier="ShowMemeDetailView" id="IrC-4K-e6e"/>
                     </connections>
                 </tableViewController>

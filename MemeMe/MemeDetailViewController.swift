@@ -9,11 +9,33 @@
 import UIKit
 
 class MemeDetailViewController: UIViewController {
+    
+    var itemSelected = 0
+
+    @IBOutlet weak var myImageView: UIImageView!
+
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
+        
+        tabBarController?.tabBar.hidden = true
+        
+        //GET A COPY OF THE ARRAY IN APP DELEGATE
+        var memes: [Meme] {
+            return(UIApplication.sharedApplication().delegate as! AppDelegate).memes
+        }
+        
+        //SET THE IMAGE
+        let image = (UIApplication.sharedApplication().delegate as! AppDelegate).memes[itemSelected].memedImage
+        myImageView.image = image
+        
+        print("")
+        print("Detail View----------")
+        print(image)
+        print("")
+
     }
 
     override func didReceiveMemoryWarning() {

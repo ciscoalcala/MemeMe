@@ -9,6 +9,15 @@
 import UIKit
 
 class MemeTableViewController: UITableViewController {
+    
+    @IBOutlet var myTableView: UITableView!
+    
+    var rowSelected = 0
+    
+    let cellIdentifier = "MemeTableViewCellReuseID"
+    
+    var memes = [Meme]()
+    
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -18,30 +27,60 @@ class MemeTableViewController: UITableViewController {
 
         // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
         // self.navigationItem.rightBarButtonItem = self.editButtonItem()
+        
+        
     }
+    
+    override func viewWillAppear(animated: Bool) {
+        memes = (UIApplication.sharedApplication().delegate as! AppDelegate).memes
+        
+        print ("view will appear")
+        myTableView.reloadData()
+        print("data has been reloaded")
+        tabBarController?.tabBar.hidden = false
+    }
+
 
 
     // MARK: - Table view data source
 
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
-        // #warning Incomplete implementation, return the number of sections
-        return 0
+        return 1
     }
 
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        // #warning Incomplete implementation, return the number of rows
-        return 0
+        return memes.count
     }
 
-    /*
+    
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("reuseIdentifier", forIndexPath: indexPath)
 
-        // Configure the cell...
+    
+        let sentMeme = memes[indexPath.row]
+        
+        let memeTopText = sentMeme.topText
+        let memeBottomText = sentMeme.bottomText
+        let originalImage = sentMeme.originalImage
+        
+        
+        let cell = tableView.dequeueReusableCellWithIdentifier(cellIdentifier, forIndexPath: indexPath) as! MemeTableViewCell
+        
+        cell.memeCellTopLabel.text      = memeTopText
+        cell.memeCellBottomLabel.text   = memeBottomText
+        cell.memeImageTopLabel.text     = memeTopText
+        cell.memeImageBottomLabel.text  = memeBottomText
+        cell.memeImageView.image        = originalImage
+        
 
         return cell
     }
-    */
+    
+    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        rowSelected = indexPath.row
+        print("did select row at index \(rowSelected)")
+        performSegueWithIdentifier("ShowMemeDetailView", sender: self)
+    }
+    
 
     /*
     // Override to support conditional editing of the table view.
@@ -78,15 +117,19 @@ class MemeTableViewController: UITableViewController {
     }
     */
 
-    /*
+    
     // MARK: - Navigation
 
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
+
+        
+        let vc = storyboard?.instantiateViewControllerWithIdentifier("MemeDetailViewController_ID") as! MemeDetailViewController
+        
+        vc.itemSelected = rowSelected
+        
     }
-    */
+    
     
         // MARK: - IBActions
     
@@ -96,8 +139,10 @@ class MemeTableViewController: UITableViewController {
             presentViewController(vc, animated: true, completion: nil)
         }
     }
+    
+    
     @IBAction func editTableView(sender: UIBarButtonItem) {
-        
+        //TODO: edit function
     }
 
 }
