@@ -216,8 +216,20 @@ class MemeEditViewController: UIViewController, UITextFieldDelegate, UIImagePick
     }
     
     
+    @IBAction func cancel(sender: UIBarButtonItem) {
+        topTextField.text = "TOP TEXT"
+        bottomTextField.text = "BOTTOM TEXT"
+        imageView.image = nil
+        shareButton.enabled = false
+        
+    }
+    
+    
+
+    
+    //MARK: MEME GENERATING, SAVING, SHARING
     @IBAction func share(sender: UIBarButtonItem) {
-        /*
+        
         let memedImage = generateMemedImage()
         
         let activityVC = UIActivityViewController(activityItems: [memedImage], applicationActivities: nil)
@@ -231,16 +243,62 @@ class MemeEditViewController: UIViewController, UITextFieldDelegate, UIImagePick
                 self.dismissViewControllerAnimated(true, completion: nil)
             }
         }
-*/
+        
         
     }
     
     
-    @IBAction func cancel(sender: UIBarButtonItem) {
-        topTextField.text = "TOP TEXT"
-        bottomTextField.text = "BOTTOM TEXT"
-        imageView.image = nil
-        shareButton.enabled = false
+    
+    
+    func generateMemedImage()->UIImage{
+        
+        if widthIsFilled{
+            UIGraphicsBeginImageContextWithOptions(CGSize(width: imageView.frame.width, height: newHeightBasedOnFullWidth), true, 0.0)
+            
+            view.drawViewHierarchyInRect(CGRectMake(0.0, diffInHeightBetweenImageViewAndImageSelected, imageView.frame.width, newWidthBasedOnFullHeight), afterScreenUpdates: true)
+            
+            let memedImage : UIImage = UIGraphicsGetImageFromCurrentImageContext()
+            
+            UIGraphicsEndImageContext()
+            
+            return memedImage
+            
+            
+        }
+            
+        else{ //height is filled
+            
+            UIGraphicsBeginImageContextWithOptions(CGSize(width: newWidthBasedOnFullHeight, height: imageView.frame.height), true, 0.0)
+            
+            view.drawViewHierarchyInRect(CGRectMake(0.0, diffInWidthBetweenImageViewAndImageSelected, imageView.frame.width, newWidthBasedOnFullHeight), afterScreenUpdates: true)
+            
+            let memedImage : UIImage = UIGraphicsGetImageFromCurrentImageContext()
+            
+            UIGraphicsEndImageContext()
+            
+            return memedImage
+            
+        }
+        
+        
+        
+    }
+    
+    
+    
+    func save(memedImage: UIImage) {
+        
+        //CREATE THE MEME
+        let meme = Meme( topText: topTextField.text!, bottomText: bottomTextField.text!, originalImage:imageView.image!, memedImage: memedImage)
+        
+        
+        //ADD THE MEME TO THE MEMES ARRAY STORED IN APP DELEGATE
+        let object = UIApplication.sharedApplication().delegate
+        let appDelegate = object as! AppDelegate
+        appDelegate.memes.append(meme)
+        
+        print("this is the array after saving")
+        print(appDelegate.memes)
         
     }
     
@@ -281,58 +339,6 @@ class MemeEditViewController: UIViewController, UITextFieldDelegate, UIImagePick
         
     }
     
-    
-    func save(memedImage: UIImage) {
-        
-        //CREATE THE MEME
-        let meme = Meme( topText: topTextField.text!, bottomText: bottomTextField.text!, originalImage:imageView.image!, memedImage: memedImage)
-        
-        
-        //ADD THE MEME TO THE MEMES ARRAY STORED IN APP DELEGATE
-        let object = UIApplication.sharedApplication().delegate
-        let appDelegate = object as! AppDelegate
-        appDelegate.memes.append(meme)
-        
-        print("this is the array after saving")
-        print(appDelegate.memes)
-
-    }
-    
-    
-    
-    func generateMemedImage()->UIImage{
-    
-        if widthIsFilled{
-            UIGraphicsBeginImageContextWithOptions(CGSize(width: imageView.frame.width, height: newHeightBasedOnFullWidth), true, 0.0)
-            
-            view.drawViewHierarchyInRect(CGRectMake(0.0, diffInHeightBetweenImageViewAndImageSelected, imageView.frame.width, newWidthBasedOnFullHeight), afterScreenUpdates: true)
-            
-            let memedImage : UIImage = UIGraphicsGetImageFromCurrentImageContext()
-            
-            UIGraphicsEndImageContext()
-            
-            return memedImage
-            
-            
-        }
-            
-        else{ //height is filled
-            
-            UIGraphicsBeginImageContextWithOptions(CGSize(width: newWidthBasedOnFullHeight, height: imageView.frame.height), true, 0.0)
-            
-            view.drawViewHierarchyInRect(CGRectMake(0.0, diffInWidthBetweenImageViewAndImageSelected, imageView.frame.width, newWidthBasedOnFullHeight), afterScreenUpdates: true)
-            
-            let memedImage : UIImage = UIGraphicsGetImageFromCurrentImageContext()
-            
-            UIGraphicsEndImageContext()
-            
-            return memedImage
-            
-        }
-        
-        
-    
-    }
         
     
     
