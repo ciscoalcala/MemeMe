@@ -31,11 +31,15 @@ class MemeTableViewController: UITableViewController {
         
         tabBarController?.tabBar.hidden = false
         
+    }
+    
+    override func viewDidAppear(animated: Bool) {
+        super.viewDidAppear(true)
+        
         //check if the array is empty, if empty go directly to edit view controller
         if memes.count == 0 {
             addMeme(self)
         }
-        
     }
 
     // MARK: - Table view data source
