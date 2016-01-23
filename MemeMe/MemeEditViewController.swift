@@ -62,7 +62,7 @@ class MemeEditViewController: UIViewController, UITextFieldDelegate, UIImagePick
         
         // SET UP TEXTFIELDS PROPERTIES AND ATTRIBUTES
         let memeTextAttributes = [
-            NSStrokeColorAttributeName : UIColor.greenColor(),
+            NSStrokeColorAttributeName : UIColor.blackColor(),
             NSForegroundColorAttributeName : UIColor.whiteColor(),
             NSFontAttributeName : UIFont(name: "impact", size: 40)!,
             NSStrokeWidthAttributeName : -1.0

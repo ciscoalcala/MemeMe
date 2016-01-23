@@ -310,6 +310,9 @@
                                     </subviews>
                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 </view>
+                                <connections>
+                                    <outlet property="myImageView" destination="CwI-CW-eZU" id="9B2-NP-mPa"/>
+                                </connections>
                             </collectionViewCell>
                         </cells>
                         <connections>
@@ -331,6 +334,7 @@
                     </navigationItem>
                     <nil key="simulatedStatusBarMetrics"/>
                     <connections>
+                        <outlet property="myCollectionView" destination="78b-rH-Orj" id="uYr-CP-RSE"/>
                         <segue destination="JC6-vq-MlR" kind="show" identifier="ShowMemeDetailView" id="PBE-fU-bVQ"/>
                     </connections>
                 </collectionViewController>
@@ -359,6 +363,6 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="IrC-4K-e6e"/>
+        <segue reference="PBE-fU-bVQ"/>
     </inferredMetricsTieBreakers>
 </document>

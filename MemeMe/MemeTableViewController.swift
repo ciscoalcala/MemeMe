@@ -38,9 +38,13 @@ class MemeTableViewController: UITableViewController {
         myTableView.reloadData()
         print("data has been reloaded")
         tabBarController?.tabBar.hidden = false
+        
+        //check if the array is empty, if empty go directly to edit view controller
+        if memes.count == 0 {
+            addMeme(self)
+        }
+        
     }
-
-
 
     // MARK: - Table view data source
 
@@ -138,7 +142,7 @@ class MemeTableViewController: UITableViewController {
     
         // MARK: - IBActions
     
-    @IBAction func addMeme(sender: UIBarButtonItem) {
+    @IBAction func addMeme(sender: AnyObject) {
         
         if let vc = storyboard?.instantiateViewControllerWithIdentifier("MemeEditViewControllerID"){
             presentViewController(vc, animated: true, completion: nil)

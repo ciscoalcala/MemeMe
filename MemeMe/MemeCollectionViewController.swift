@@ -8,9 +8,14 @@
 
 import UIKit
 
-private let reuseIdentifier = "Cell"
+private let reuseIdentifier = "MemeCollViewCellReuseID"
 
 class MemeCollectionViewController: UICollectionViewController {
+    var memes = [Meme]()
+    
+    var itemSelected = 0
+    
+    @IBOutlet var myCollectionView: UICollectionView!
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -18,46 +23,69 @@ class MemeCollectionViewController: UICollectionViewController {
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
 
-        // Register cell classes
-        self.collectionView!.registerClass(UICollectionViewCell.self, forCellWithReuseIdentifier: reuseIdentifier)
-
         // Do any additional setup after loading the view.
     }
 
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
+    override func viewWillAppear(animated: Bool) {
+        memes = (UIApplication.sharedApplication().delegate as! AppDelegate).memes
+        
+        myCollectionView.reloadData()
+        
+        tabBarController?.tabBar.hidden = false
+
+        
     }
 
-    /*
+    
     // MARK: - Navigation
 
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         // Get the new view controller using [segue destinationViewController].
         // Pass the selected object to the new view controller.
+        
+        let vc = segue.destinationViewController as! MemeDetailViewController
+        
+        vc.itemSelected = itemSelected
+        print(" ")
+        print("prepare for segue")
+        print("this is the row selected: \(itemSelected)")
+        print("this is what vc.itemselected: \(vc.itemSelected)")
+        print(" ")
+        
     }
-    */
+    
 
     // MARK: UICollectionViewDataSource
 
     override func numberOfSectionsInCollectionView(collectionView: UICollectionView) -> Int {
-        // #warning Incomplete implementation, return the number of sections
-        return 0
+        return 1
     }
 
 
     override func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        // #warning Incomplete implementation, return the number of items
-        return 0
+        return memes.count
     }
 
     override func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCellWithReuseIdentifier(reuseIdentifier, forIndexPath: indexPath)
+        let cell = collectionView.dequeueReusableCellWithReuseIdentifier(reuseIdentifier, forIndexPath: indexPath) as! MemeCollectionViewCell
     
         // Configure the cell
+        
+        let sentMeme = memes[indexPath.row]
+        
+        let memedImage      = sentMeme.memedImage
+        
+        cell.myImageView.image        = memedImage
     
         return cell
+    }
+    
+    override func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
+        itemSelected = indexPath.item
+        performSegueWithIdentifier("ShowMemeDetailView", sender: self)
+
+    
     }
 
     // MARK: UICollectionViewDelegate
