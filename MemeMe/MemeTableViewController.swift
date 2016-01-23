@@ -22,12 +22,6 @@ class MemeTableViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        // Uncomment the following line to preserve selection between presentations
-        // self.clearsSelectionOnViewWillAppear = false
-
-        //self.navigationItem.rightBarButtonItem = self.editButtonItem()
-        
-        
     }
     
     override func viewWillAppear(animated: Bool) {
@@ -82,15 +76,12 @@ class MemeTableViewController: UITableViewController {
     
 
     
-    // Override to support conditional editing of the table view.
     override func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
-        // Return false if you do not want the specified item to be editable.
         return true
     }
     
 
     
-    // Override to support editing the table view.
     override func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
         if editingStyle == .Delete {
             
@@ -128,18 +119,12 @@ class MemeTableViewController: UITableViewController {
     }
     
     
-        // MARK: - IBActions
-    
+    // MARK: - IBActions
     @IBAction func addMeme(sender: AnyObject) {
         
         if let vc = storyboard?.instantiateViewControllerWithIdentifier("MemeEditViewControllerID"){
             presentViewController(vc, animated: true, completion: nil)
         }
-    }
-    
-    
-    @IBAction func editTableView(sender: UIBarButtonItem) {
-        //TODO: edit function
     }
 
 }

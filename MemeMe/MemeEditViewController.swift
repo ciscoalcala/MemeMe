@@ -12,7 +12,6 @@ class MemeEditViewController: UIViewController, UITextFieldDelegate, UIImagePick
     
     
     
-    
     //MARK: I B OUTLETS
     @IBOutlet weak var spacingConstraintFromTopTextToTopOfImageView: NSLayoutConstraint!
     
@@ -373,7 +372,7 @@ class MemeEditViewController: UIViewController, UITextFieldDelegate, UIImagePick
     func rotated(){
         
         if imageView.image == nil{
-            print("there is no image")
+            //no need to adjust text views
         }
         else{
             adjustTextViewsAfterImageSelected(imageView.image!)

@@ -18,11 +18,10 @@ class MemeCollectionViewController: UICollectionViewController, UICollectionView
     @IBOutlet var myCollectionView: UICollectionView!
 
     @IBOutlet weak var flowLayout: UICollectionViewFlowLayout!
+   
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Uncomment the following line to preserve selection between presentations
-        // self.clearsSelectionOnViewWillAppear = false
 
         // Do any additional setup after loading the view.
         
@@ -35,6 +34,8 @@ class MemeCollectionViewController: UICollectionViewController, UICollectionView
         flowLayout.itemSize = CGSizeMake(dimensionX, dimensionX)
     }
 
+    
+    
     override func viewWillAppear(animated: Bool) {
         memes = (UIApplication.sharedApplication().delegate as! AppDelegate).memes
         
@@ -48,11 +49,8 @@ class MemeCollectionViewController: UICollectionViewController, UICollectionView
     
     // MARK: - Navigation
 
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        // Get the new view controller using [segue destinationViewController].
-        // Pass the selected object to the new view controller.
-        
+
         let vc = segue.destinationViewController as! MemeDetailViewController
         
         vc.itemSelected = itemSelected
@@ -71,6 +69,8 @@ class MemeCollectionViewController: UICollectionViewController, UICollectionView
         return memes.count
     }
 
+    
+    
     override func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCellWithReuseIdentifier(reuseIdentifier, forIndexPath: indexPath) as! MemeCollectionViewCell
     
@@ -85,13 +85,14 @@ class MemeCollectionViewController: UICollectionViewController, UICollectionView
         return cell
     }
     
+    
     override func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
         itemSelected = indexPath.item
         performSegueWithIdentifier("ShowMemeDetailView", sender: self)
-
-    
     }
 
+    
+    
     
     // MARK: - IBActions
 
@@ -100,10 +101,6 @@ class MemeCollectionViewController: UICollectionViewController, UICollectionView
         if let vc = storyboard?.instantiateViewControllerWithIdentifier("MemeEditViewControllerID"){
             presentViewController(vc, animated: true, completion: nil)
         }
-    }
-    
-    @IBAction func editTableView(sender: UIBarButtonItem) {
-        
     }
 
 }
