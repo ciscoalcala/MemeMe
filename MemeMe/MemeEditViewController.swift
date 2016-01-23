@@ -251,29 +251,78 @@ class MemeEditViewController: UIViewController, UITextFieldDelegate, UIImagePick
     //MARK: MEME GENERATING, SAVING
     func generateMemedImage()->UIImage{
         
-        if widthIsFilled{
-            UIGraphicsBeginImageContextWithOptions(CGSize(width: imageView.frame.width, height: newHeightBasedOnFullWidth), true, 1.0)
+        if widthIsFilled{ //for portrait mode
             
-            view.drawViewHierarchyInRect(CGRectMake(0.0, diffInHeightBetweenImageViewAndImageSelected * -1, imageView.frame.width, newWidthBasedOnFullHeight), afterScreenUpdates: true)
+            //define the rect of the imageView to be just the visible image not the entire imageView
+            let imageViewRect = CGRectMake(0.0, 0.0, view.bounds.size.width, newHeightBasedOnFullWidth)
+            imageView.bounds = imageViewRect
+
+            //define the rect of the topTextView
+            let topTextRect = CGRectMake(0, 0, topTextField.bounds.size.width, topTextField.bounds.size.height)
+
+            //define the rect of the bottomTextView
+            let bottomTextRect = CGRectMake(0, (newHeightBasedOnFullWidth - bottomTextField.bounds.size.height), bottomTextField.bounds.size.width, bottomTextField.bounds.size.height)
+
+            print(" ")
+            print(topTextRect)
+            print(imageViewRect)
+            print(bottomTextRect)
+            print(" ")
+
+            //BEGIN IMAGE CONTEXT
+            UIGraphicsBeginImageContextWithOptions(imageViewRect.size, true, 0.0)
+            
+            
+            imageView.drawViewHierarchyInRect(imageViewRect, afterScreenUpdates: true)
+            
+            topTextField.drawViewHierarchyInRect(topTextRect, afterScreenUpdates: true)
+            
+            bottomTextField.drawViewHierarchyInRect(bottomTextRect, afterScreenUpdates: true)
+        
             
             let memedImage : UIImage = UIGraphicsGetImageFromCurrentImageContext()
             
             UIGraphicsEndImageContext()
+            //END IMAGE CONTEXT
+            
             
             return memedImage
             
             
         }
             
-        else{ //height is filled
+        else{ //height is filled, for landscape mode
             
-            UIGraphicsBeginImageContextWithOptions(CGSize(width: newWidthBasedOnFullHeight, height: imageView.frame.height), true, 0.0)
+            //define the rect of the imageView to be just the visible image not the entire imageView
+            let imageViewRect = CGRectMake(0.0, 0.0, view.bounds.size.width, newHeightBasedOnFullWidth)
+            imageView.bounds = imageViewRect
             
-            view.drawViewHierarchyInRect(CGRectMake(0.0, diffInWidthBetweenImageViewAndImageSelected, imageView.frame.width, newWidthBasedOnFullHeight), afterScreenUpdates: true)
+            //define the rect of the topTextView
+            let topTextRect = CGRectMake(((imageView.bounds.size.width - topTextField.bounds.size.width) * 0.5), 0, topTextField.bounds.size.width, topTextField.bounds.size.height)
+            
+            //define the rect of the bottomTextView
+            let bottomTextRect = CGRectMake(((imageView.bounds.size.width - bottomTextField.bounds.size.width) * 0.5), (newHeightBasedOnFullWidth - bottomTextField.bounds.size.height), bottomTextField.bounds.size.width, bottomTextField.bounds.size.height)
+            
+            print(topTextRect)
+            print(imageViewRect)
+            print(bottomTextRect)
+            
+            //BEGIN IMAGE CONTEXT
+            UIGraphicsBeginImageContextWithOptions(imageViewRect.size, true, 0.0)
+            
+            
+            imageView.drawViewHierarchyInRect(imageViewRect, afterScreenUpdates: true)
+            
+            topTextField.drawViewHierarchyInRect(topTextRect, afterScreenUpdates: true)
+            
+            bottomTextField.drawViewHierarchyInRect(bottomTextRect, afterScreenUpdates: true)
+            
             
             let memedImage : UIImage = UIGraphicsGetImageFromCurrentImageContext()
             
             UIGraphicsEndImageContext()
+            //END IMAGE CONTEXT
+            
             
             return memedImage
             
@@ -300,8 +349,7 @@ class MemeEditViewController: UIViewController, UITextFieldDelegate, UIImagePick
         print(appDelegate.memes)
         
     }
-    
-    
+
     
     
     //MARK: IMAGE PICKER CONTROLLER DELEGATE METHODS
@@ -425,7 +473,10 @@ class MemeEditViewController: UIViewController, UITextFieldDelegate, UIImagePick
         
         //(full height of imageView container - calculated height) * 0.5
         //0.5 because diff will be split above and below image selected
-        return ((imageView.frame.height - newHeightBasedOnFullWidth) * 0.5)
+        print("what is the diff")
+        let diff = (imageView.frame.height - newHeightBasedOnFullWidth) * 0.5
+        print(diff)
+        return (diff)
     }
     
     

@@ -143,6 +143,7 @@
                     </view>
                     <nil key="simulatedStatusBarMetrics"/>
                     <nil key="simulatedTopBarMetrics"/>
+                    <nil key="simulatedBottomBarMetrics"/>
                     <connections>
                         <outlet property="myImageView" destination="1dQ-fc-9Di" id="92X-zS-Ht4"/>
                     </connections>
@@ -261,7 +262,7 @@
                     </navigationItem>
                     <connections>
                         <outlet property="myTableView" destination="I65-o8-6Kj" id="EnL-km-1BD"/>
-                        <segue destination="JC6-vq-MlR" kind="showDetail" identifier="ShowMemeDetailView" id="IrC-4K-e6e"/>
+                        <segue destination="JC6-vq-MlR" kind="show" identifier="ShowMemeDetailView" action="showDetailViewController:sender:" id="IrC-4K-e6e"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="1CZ-s3-jfK" userLabel="First Responder" sceneMemberID="firstResponder"/>
