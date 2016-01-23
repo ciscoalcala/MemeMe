@@ -58,18 +58,16 @@ class MemeTableViewController: UITableViewController {
     
         let sentMeme = memes[indexPath.row]
         
-        let memeTopText = sentMeme.topText
-        let memeBottomText = sentMeme.bottomText
-        let originalImage = sentMeme.originalImage
+        let memeTopText     = sentMeme.topText
+        let memeBottomText  = sentMeme.bottomText
+        let memedImage      = sentMeme.memedImage
         
         
         let cell = tableView.dequeueReusableCellWithIdentifier(cellIdentifier, forIndexPath: indexPath) as! MemeTableViewCell
         
         cell.memeCellTopLabel.text      = memeTopText
         cell.memeCellBottomLabel.text   = memeBottomText
-        cell.memeImageTopLabel.text     = memeTopText
-        cell.memeImageBottomLabel.text  = memeBottomText
-        cell.memeImageView.image        = originalImage
+        cell.memeImageView.image        = memedImage
         
 
         return cell
@@ -124,10 +122,17 @@ class MemeTableViewController: UITableViewController {
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
 
         
-        let vc = storyboard?.instantiateViewControllerWithIdentifier("MemeDetailViewController_ID") as! MemeDetailViewController
+        let vc = segue.destinationViewController as! MemeDetailViewController
         
         vc.itemSelected = rowSelected
+        print(" ")
+        print("prepare for segue")
+        print("this is the row selected: \(rowSelected)")
+        print("this is what vc.itemselected: \(vc.itemSelected)")
+        print(" ")
         
+    
+
     }
     
     
