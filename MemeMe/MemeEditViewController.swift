@@ -263,11 +263,6 @@ class MemeEditViewController: UIViewController, UITextFieldDelegate, UIImagePick
             //define the rect of the bottomTextView
             let bottomTextRect = CGRectMake(0, (newHeightBasedOnFullWidth - bottomTextField.bounds.size.height), bottomTextField.bounds.size.width, bottomTextField.bounds.size.height)
 
-            print(" ")
-            print(topTextRect)
-            print(imageViewRect)
-            print(bottomTextRect)
-            print(" ")
 
             //BEGIN IMAGE CONTEXT
             UIGraphicsBeginImageContextWithOptions(imageViewRect.size, true, 0.0)
@@ -302,10 +297,7 @@ class MemeEditViewController: UIViewController, UITextFieldDelegate, UIImagePick
             
             //define the rect of the bottomTextView
             let bottomTextRect = CGRectMake(((imageView.bounds.size.width - bottomTextField.bounds.size.width) * 0.5), (newHeightBasedOnFullWidth - bottomTextField.bounds.size.height), bottomTextField.bounds.size.width, bottomTextField.bounds.size.height)
-            
-            print(topTextRect)
-            print(imageViewRect)
-            print(bottomTextRect)
+
             
             //BEGIN IMAGE CONTEXT
             UIGraphicsBeginImageContextWithOptions(imageViewRect.size, true, 0.0)
@@ -344,9 +336,7 @@ class MemeEditViewController: UIViewController, UITextFieldDelegate, UIImagePick
         let object = UIApplication.sharedApplication().delegate
         let appDelegate = object as! AppDelegate
         appDelegate.memes.append(meme)
-        
-        print("this is the array after saving")
-        print(appDelegate.memes)
+
         
     }
 
@@ -354,7 +344,6 @@ class MemeEditViewController: UIViewController, UITextFieldDelegate, UIImagePick
     
     //MARK: IMAGE PICKER CONTROLLER DELEGATE METHODS
     func imagePickerControllerDidCancel(picker: UIImagePickerController){
-        print ("cancel")
         
         dismissViewControllerAnimated(true, completion: nil)
         
@@ -362,7 +351,6 @@ class MemeEditViewController: UIViewController, UITextFieldDelegate, UIImagePick
     
     
     func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : AnyObject]){
-        print("did pick something")
         
         dismissViewControllerAnimated(true, completion: nil)
         
@@ -371,15 +359,6 @@ class MemeEditViewController: UIViewController, UITextFieldDelegate, UIImagePick
             imageView.image = image
             
             imageSelected = image
-            
-            print(" ")
-            print("this is the height of image picked")
-            print(image.size.height)
-            print(" ")
-            print("this is the width of image picked")
-            print(image.size.width)
-            print(" ")
-            
             
         }
         
@@ -394,7 +373,7 @@ class MemeEditViewController: UIViewController, UITextFieldDelegate, UIImagePick
     func rotated(){
         
         if imageView.image == nil{
-            print("there is no imagee")
+            print("there is no image")
         }
         else{
             adjustTextViewsAfterImageSelected(imageView.image!)
@@ -458,11 +437,9 @@ class MemeEditViewController: UIViewController, UITextFieldDelegate, UIImagePick
         newHeightBasedOnFullWidth = (imageView.frame.size.width / imageSelected.size.width) * imageSelected.size.height
         
         if newHeightBasedOnFullWidth < imageView.frame.size.height{
-            print("width will be filled, height will be calculated")
             widthIsFilled = true
         }
         else{
-            print("height will be filled, width will be calculated")
             widthIsFilled = false
         }
         
@@ -473,9 +450,7 @@ class MemeEditViewController: UIViewController, UITextFieldDelegate, UIImagePick
         
         //(full height of imageView container - calculated height) * 0.5
         //0.5 because diff will be split above and below image selected
-        print("what is the diff")
         let diff = (imageView.frame.height - newHeightBasedOnFullWidth) * 0.5
-        print(diff)
         return (diff)
     }
     

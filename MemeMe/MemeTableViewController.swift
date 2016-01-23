@@ -25,8 +25,7 @@ class MemeTableViewController: UITableViewController {
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
 
-        // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-        // self.navigationItem.rightBarButtonItem = self.editButtonItem()
+        //self.navigationItem.rightBarButtonItem = self.editButtonItem()
         
         
     }
@@ -34,9 +33,8 @@ class MemeTableViewController: UITableViewController {
     override func viewWillAppear(animated: Bool) {
         memes = (UIApplication.sharedApplication().delegate as! AppDelegate).memes
         
-        print ("view will appear")
         myTableView.reloadData()
-        print("data has been reloaded")
+        
         tabBarController?.tabBar.hidden = false
         
         //check if the array is empty, if empty go directly to edit view controller
@@ -79,45 +77,41 @@ class MemeTableViewController: UITableViewController {
     
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         rowSelected = indexPath.row
-        print("did select row at index \(rowSelected)")
         performSegueWithIdentifier("ShowMemeDetailView", sender: self)
     }
     
 
-    /*
+    
     // Override to support conditional editing of the table view.
     override func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
         // Return false if you do not want the specified item to be editable.
         return true
     }
-    */
+    
 
-    /*
+    
     // Override to support editing the table view.
     override func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
         if editingStyle == .Delete {
+            
+            tableView.beginUpdates()
+            
             // Delete the row from the data source
+            (UIApplication.sharedApplication().delegate as! AppDelegate).memes.removeAtIndex(indexPath.row)
+            
+            //recopy the current memes array
+            memes = (UIApplication.sharedApplication().delegate as! AppDelegate).memes
+            
             tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
+            
+            
+            tableView.endUpdates()
+            
+            
         } else if editingStyle == .Insert {
             // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
         }    
     }
-    */
-
-    /*
-    // Override to support rearranging the table view.
-    override func tableView(tableView: UITableView, moveRowAtIndexPath fromIndexPath: NSIndexPath, toIndexPath: NSIndexPath) {
-
-    }
-    */
-
-    /*
-    // Override to support conditional rearranging of the table view.
-    override func tableView(tableView: UITableView, canMoveRowAtIndexPath indexPath: NSIndexPath) -> Bool {
-        // Return false if you do not want the item to be re-orderable.
-        return true
-    }
-    */
 
     
     // MARK: - Navigation
@@ -129,13 +123,7 @@ class MemeTableViewController: UITableViewController {
         let vc = segue.destinationViewController as! MemeDetailViewController
         
         vc.itemSelected = rowSelected
-        print(" ")
-        print("prepare for segue")
-        print("this is the row selected: \(rowSelected)")
-        print("this is what vc.itemselected: \(vc.itemSelected)")
-        print(" ")
-        
-    
+
 
     }
     

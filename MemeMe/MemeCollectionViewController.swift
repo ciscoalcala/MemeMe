@@ -10,13 +10,14 @@ import UIKit
 
 private let reuseIdentifier = "MemeCollViewCellReuseID"
 
-class MemeCollectionViewController: UICollectionViewController {
+class MemeCollectionViewController: UICollectionViewController, UICollectionViewDelegateFlowLayout {
     var memes = [Meme]()
     
     var itemSelected = 0
     
     @IBOutlet var myCollectionView: UICollectionView!
 
+    @IBOutlet weak var flowLayout: UICollectionViewFlowLayout!
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -24,6 +25,14 @@ class MemeCollectionViewController: UICollectionViewController {
         // self.clearsSelectionOnViewWillAppear = false
 
         // Do any additional setup after loading the view.
+        
+        let spacing : CGFloat = 2.0
+        let dimensionX = (view.frame.size.width - 2.0 * spacing) / 3.0
+        
+        flowLayout.minimumInteritemSpacing = spacing
+        flowLayout.minimumLineSpacing = spacing
+        
+        flowLayout.itemSize = CGSizeMake(dimensionX, dimensionX)
     }
 
     override func viewWillAppear(animated: Bool) {
@@ -47,12 +56,7 @@ class MemeCollectionViewController: UICollectionViewController {
         let vc = segue.destinationViewController as! MemeDetailViewController
         
         vc.itemSelected = itemSelected
-        print(" ")
-        print("prepare for segue")
-        print("this is the row selected: \(itemSelected)")
-        print("this is what vc.itemselected: \(vc.itemSelected)")
-        print(" ")
-        
+ 
     }
     
 
@@ -88,36 +92,6 @@ class MemeCollectionViewController: UICollectionViewController {
     
     }
 
-    // MARK: UICollectionViewDelegate
-
-    /*
-    // Uncomment this method to specify if the specified item should be highlighted during tracking
-    override func collectionView(collectionView: UICollectionView, shouldHighlightItemAtIndexPath indexPath: NSIndexPath) -> Bool {
-        return true
-    }
-    */
-
-    /*
-    // Uncomment this method to specify if the specified item should be selected
-    override func collectionView(collectionView: UICollectionView, shouldSelectItemAtIndexPath indexPath: NSIndexPath) -> Bool {
-        return true
-    }
-    */
-
-    /*
-    // Uncomment these methods to specify if an action menu should be displayed for the specified item, and react to actions performed on the item
-    override func collectionView(collectionView: UICollectionView, shouldShowMenuForItemAtIndexPath indexPath: NSIndexPath) -> Bool {
-        return false
-    }
-
-    override func collectionView(collectionView: UICollectionView, canPerformAction action: Selector, forItemAtIndexPath indexPath: NSIndexPath, withSender sender: AnyObject?) -> Bool {
-        return false
-    }
-
-    override func collectionView(collectionView: UICollectionView, performAction action: Selector, forItemAtIndexPath indexPath: NSIndexPath, withSender sender: AnyObject?) {
-    
-    }
-    */
     
     // MARK: - IBActions
 
