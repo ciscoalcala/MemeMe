@@ -177,7 +177,7 @@
         <scene sceneID="zVf-h4-i0e">
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="RAF-2l-wgz" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Table View" id="GRT-mo-QX5"/>
+                    <tabBarItem key="tabBarItem" title="Table View" image="tableTab" id="GRT-mo-QX5"/>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="Jcf-TO-gbp">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
@@ -337,7 +337,7 @@
         <scene sceneID="S0p-J7-bsg">
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="A4T-8Q-KHR" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Collection View" id="3bi-Qp-QXf"/>
+                    <tabBarItem key="tabBarItem" title="Collection View" image="collectionTab" id="3bi-Qp-QXf"/>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="q7O-ie-YWB">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
@@ -353,6 +353,10 @@
             <point key="canvasLocation" x="787" y="1929"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="collectionTab" width="30" height="30"/>
+        <image name="tableTab" width="30" height="30"/>
+    </resources>
     <inferredMetricsTieBreakers>
         <segue reference="PBE-fU-bVQ"/>
     </inferredMetricsTieBreakers>
