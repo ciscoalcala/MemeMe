@@ -12,6 +12,8 @@ class MemeDetailViewController: UIViewController {
     
     var itemSelected = 0
     
+    var editingExistingMeme = false
+    
 
     @IBOutlet weak var myImageView: UIImageView!
 
@@ -21,14 +23,40 @@ class MemeDetailViewController: UIViewController {
 
         
         tabBarController?.tabBar.hidden = true
-        
+
+    }
+    
+    
+    
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(true)
         
         //SET THE IMAGE
         let image = (UIApplication.sharedApplication().delegate as! AppDelegate).memes[itemSelected].memedImage
         myImageView.image = image
 
     }
+    
+    
 
+    @IBAction func edit(sender: UIBarButtonItem) {
+        print("start of edit")
+        
+        if let vc = storyboard!.instantiateViewControllerWithIdentifier("MemeEditViewControllerID") as? MemeEditViewController{
+            presentViewController(vc, animated: true, completion: nil)
+            
+            print("middle of edit")
+
+            vc.editingExistingMeme = true
+            vc.itemSelected = itemSelected
+            
+            print("end of edit")
+            
+        }
+        
+    
+        
+    }
 
 
 }

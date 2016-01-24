@@ -52,6 +52,14 @@ class MemeEditViewController: UIViewController, UITextFieldDelegate, UIImagePick
     //will be used to create rect for generating meme
     var diffInWidthBetweenImageViewAndImageSelected = CGFloat(0.0)
     
+    //will be used when editing an existing meme
+    var editingExistingMeme = false
+    
+    var itemSelected = 0
+    
+    var firstTimeViewHasAppeared = true
+    
+    
 
     
     //MARK: VIEW LIFECYCLE
@@ -74,16 +82,12 @@ class MemeEditViewController: UIViewController, UITextFieldDelegate, UIImagePick
         topTextField.textAlignment = NSTextAlignment.Center
         bottomTextField.textAlignment = NSTextAlignment.Center
         
-        topTextField.text = "TOP TEXT"
-        bottomTextField.text = "BOTTOM TEXT"
         
         topTextField.delegate = self
         bottomTextField.delegate = self
         
         topTextField.autocapitalizationType = UITextAutocapitalizationType.AllCharacters
         bottomTextField.autocapitalizationType = UITextAutocapitalizationType.AllCharacters
-
-        
         
         
         
@@ -96,6 +100,26 @@ class MemeEditViewController: UIViewController, UITextFieldDelegate, UIImagePick
     
     override func viewWillAppear(animated: Bool) {
         
+        print("view will appear")
+       
+        if editingExistingMeme && firstTimeViewHasAppeared{
+            print("editing existing meme")
+            
+            let existingMeme = (UIApplication.sharedApplication().delegate as! AppDelegate).memes[itemSelected]
+            
+            //set the existing values
+            topTextField.text = existingMeme.topText
+            bottomTextField.text = existingMeme.bottomText
+            imageView.image = existingMeme.originalImage
+            imageSelected = existingMeme.originalImage
+            
+            firstTimeViewHasAppeared = false
+            
+            topTextField.hidden = true
+            bottomTextField.hidden = true
+        }
+
+
         
         //  ENABLE / DISABLE CAMERA BUTTON DEPENDING ON AVAILABILITY OF DEVICE/SIMULATOR
         if UIImagePickerController.isSourceTypeAvailable(UIImagePickerControllerSourceType.Camera){
@@ -104,8 +128,6 @@ class MemeEditViewController: UIViewController, UITextFieldDelegate, UIImagePick
         else{
             cameraButton.enabled = false
         }
-        
-        
         
         //  ENABLE / DISABLE SHARE BUTTON UNTIL IMAGE HAS BEEN LOADED
         if imageView.image == nil{
@@ -117,14 +139,25 @@ class MemeEditViewController: UIViewController, UITextFieldDelegate, UIImagePick
         }
         
         
-        
         //  SUBSCRIBE TO KEYBOARD SHOW/HIDE NOTIFICAIONS
         subscribeToKeyboardShowNotifications()
         subscribeToKeyboardHideNotifications()
         
     }
     
-    
+    override func viewDidAppear(animated: Bool) {
+        super.viewDidAppear(true)
+        
+        if editingExistingMeme{
+            adjustTextViewsAfterImageSelected(imageSelected)
+            topTextField.hidden = false
+            bottomTextField.hidden = false
+        }
+
+        
+
+    }
+
     override func viewWillDisappear(animated: Bool) {
         
         super.viewWillDisappear(animated)
@@ -344,11 +377,21 @@ class MemeEditViewController: UIViewController, UITextFieldDelegate, UIImagePick
         //CREATE THE MEME
         let meme = Meme( topText: topTextField.text!, bottomText: bottomTextField.text!, originalImage:imageView.image!, memedImage: memedImage)
         
-        
-        //ADD THE MEME TO THE MEMES ARRAY STORED IN APP DELEGATE
         let object = UIApplication.sharedApplication().delegate
         let appDelegate = object as! AppDelegate
-        appDelegate.memes.append(meme)
+
+        
+        if editingExistingMeme{
+            //REPLACE THE MEME IN THE MEMES ARRAY STORED IN APP DELEGATE
+            appDelegate.memes.removeAtIndex(itemSelected)
+            appDelegate.memes.insert(meme, atIndex: itemSelected)
+        }
+            
+            
+        else{
+            //ADD THE MEME TO THE MEMES ARRAY STORED IN APP DELEGATE
+            appDelegate.memes.append(meme)
+        }
 
         
     }
@@ -402,6 +445,8 @@ class MemeEditViewController: UIViewController, UITextFieldDelegate, UIImagePick
         
         if widthIsFilled{
             
+            print("width is filled")
+            
             //find the difference in heights
             diffInHeightBetweenImageViewAndImageSelected = whatIsTheDiffInHeightBetweenImageViewAndImageSelected()
             
@@ -422,6 +467,7 @@ class MemeEditViewController: UIViewController, UITextFieldDelegate, UIImagePick
             
             
         else{ //height is filled
+            print("height is filled")
             
             //find the difference in widths
             diffInWidthBetweenImageViewAndImageSelected = whatIsTheDiffInWidthBetweenImageViewAndImageSelected()
