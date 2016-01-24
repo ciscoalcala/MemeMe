@@ -100,10 +100,8 @@ class MemeEditViewController: UIViewController, UITextFieldDelegate, UIImagePick
     
     override func viewWillAppear(animated: Bool) {
         
-        print("view will appear")
        
         if editingExistingMeme && firstTimeViewHasAppeared{
-            print("editing existing meme")
             
             let existingMeme = (UIApplication.sharedApplication().delegate as! AppDelegate).memes[itemSelected]
             
@@ -445,7 +443,6 @@ class MemeEditViewController: UIViewController, UITextFieldDelegate, UIImagePick
         
         if widthIsFilled{
             
-            print("width is filled")
             
             //find the difference in heights
             diffInHeightBetweenImageViewAndImageSelected = whatIsTheDiffInHeightBetweenImageViewAndImageSelected()
@@ -467,7 +464,6 @@ class MemeEditViewController: UIViewController, UITextFieldDelegate, UIImagePick
             
             
         else{ //height is filled
-            print("height is filled")
             
             //find the difference in widths
             diffInWidthBetweenImageViewAndImageSelected = whatIsTheDiffInWidthBetweenImageViewAndImageSelected()

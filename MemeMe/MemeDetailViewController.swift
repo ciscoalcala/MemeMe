@@ -40,18 +40,13 @@ class MemeDetailViewController: UIViewController {
     
 
     @IBAction func edit(sender: UIBarButtonItem) {
-        print("start of edit")
         
         if let vc = storyboard!.instantiateViewControllerWithIdentifier("MemeEditViewControllerID") as? MemeEditViewController{
             presentViewController(vc, animated: true, completion: nil)
             
-            print("middle of edit")
-
             vc.editingExistingMeme = true
             vc.itemSelected = itemSelected
-            
-            print("end of edit")
-            
+                        
         }
         
     
