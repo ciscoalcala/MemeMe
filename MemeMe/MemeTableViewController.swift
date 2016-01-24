@@ -18,6 +18,8 @@ class MemeTableViewController: UITableViewController {
     
     var memes = [Meme]()
     
+    var initialLaunch = true
+    
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -36,8 +38,10 @@ class MemeTableViewController: UITableViewController {
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(true)
         
-        //check if the array is empty, if empty go directly to edit view controller
-        if memes.count == 0 {
+        //check if the array is empty and only upon initial launch of app, if empty go directly to edit view controller
+        //initialLaunch will be set to false after addMeme block executes
+        //this will prevent loop from showing an empty table view and presenting edit view controller
+        if memes.count == 0 && initialLaunch{
             addMeme(self)
         }
     }
@@ -127,8 +131,14 @@ class MemeTableViewController: UITableViewController {
     @IBAction func addMeme(sender: AnyObject) {
         
         if let vc = storyboard?.instantiateViewControllerWithIdentifier("MemeEditViewControllerID"){
-            presentViewController(vc, animated: true, completion: nil)
+            presentViewController(vc, animated: true, completion: {(Bool) in
+                self.initialLaunch = false
+            })
         }
+    }
+    
+    func appHasBeenLaunchedForFirstTime(){
+        initialLaunch = false
     }
 
 }

@@ -216,10 +216,20 @@ class MemeEditViewController: UIViewController, UITextFieldDelegate, UIImagePick
     
     
     @IBAction func cancel(sender: UIBarButtonItem) {
-        topTextField.text = "TOP TEXT"
-        bottomTextField.text = "BOTTOM TEXT"
-        imageView.image = nil
-        shareButton.enabled = false
+        //if image view is nil
+        //meme edit view controller will dismiss itself
+        if imageView.image == nil{
+            self.dismissViewControllerAnimated(true, completion: nil)
+        }
+        else{
+            //else, resets the textfields and image
+            topTextField.text = "TOP TEXT"
+            bottomTextField.text = "BOTTOM TEXT"
+            imageView.image = nil
+            shareButton.enabled = false
+        
+        }
+    
         
     }
     
