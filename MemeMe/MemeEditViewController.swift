@@ -80,6 +80,10 @@ class MemeEditViewController: UIViewController, UITextFieldDelegate, UIImagePick
         topTextField.delegate = self
         bottomTextField.delegate = self
         
+        topTextField.autocapitalizationType = UITextAutocapitalizationType.AllCharacters
+        bottomTextField.autocapitalizationType = UITextAutocapitalizationType.AllCharacters
+
+        
         
         
         
